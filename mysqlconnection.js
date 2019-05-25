@@ -10,9 +10,9 @@ module.exports = {
         if (args.usessl)
         {
             this.DBSSL = {
-                ca: fs.readFileSync(__dirname + "/certs/ca.pem"),
-                key: fs.readFileSync(__dirname + "/certs/client-key.pem"),
-                cert: fs.readFileSync(__dirname + "/certs/client-cert.pem")
+                ca: fs.readFileSync(args.ca),
+                key: fs.readFileSync(args.key),
+                cert: fs.readFileSync(args.cert)
             };
         }
         else
