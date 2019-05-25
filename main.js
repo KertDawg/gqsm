@@ -19,6 +19,7 @@ const args = require("minimist")(process.argv.slice(2), {
     },
     unknown: PrintHelp
 });
+const Table = require("./table");
 
 
 
