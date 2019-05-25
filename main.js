@@ -1,3 +1,4 @@
+const async = require("async");
 const db = require("./mysqlconnection");
 const args = require("minimist")(process.argv.slice(2), {
     boolean: ["e"],
@@ -63,6 +64,50 @@ function CheckArguments(args)
 }
 
 
+//  Make sure we have the right arguments.
 CheckArguments(args);
+
+//  Connect to the database.
 db.ConnectToDB(args);
-db.DBConn.end();
+
+//  Initialize table array.
+var DB = [];
+
+//  Read the tables in the database.
+db.DBConn.query("SHOW TABLES;", function (ShowError, ShowResults, ShowFields)
+{
+    async.each(ShowResults, function (OneRow, Callback)
+    {
+        if (ShowError)
+        {
+            throw ShowError;
+        }
+
+
+        var t = new Table(OneRow[ShowFields[0].name]);
+        DB.push(t);
+
+        db.DBConn.query("DESCRIBE " + t.TableName + ";", function (DescribeError, DescribeResults, DescribeFields)
+        {
+            if (DescribeError)
+            {
+                throw DescribeError;
+            }
+
+            for (var j = 0; j < DescribeResults.length; j++)
+            {
+                t.AddField(DescribeResults[j]["Field"], DescribeResults[j]["Type"]);
+            }
+
+            Callback();
+        });
+    },
+    function (error)
+    {
+        console.log(JSON.stringify(DB));
+
+        //  Disconnect from the database.
+        db.DBConn.end();
+    });
+});
+

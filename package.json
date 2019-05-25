@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/KertDawg/gqsm#readme",
   "dependencies": {
+    "async": "^3.0.0",
     "minimist": "^1.2.0",
     "mysql": "^2.17.1"
   }
