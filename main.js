@@ -104,10 +104,16 @@ db.DBConn.query("SHOW TABLES;", function (ShowError, ShowResults, ShowFields)
     },
     function (error)
     {
-        console.log(JSON.stringify(DB));
-
         //  Disconnect from the database.
         db.DBConn.end();
+
+        //  Loop through schema and determine types and foreign keys.
+        for (var i = 0; i < DB.length; i++)
+        {
+            DB[i].Process(DB);
+        }
+
+        console.log(JSON.stringify(DB));
     });
 });
 
